@@ -1,11 +1,3 @@
-"""
-Integration with the OpenFoodFacts external API.
-
-Kept separate from routes.py so it can be unit tested in isolation
-(with unittest.mock) without needing a live network call or a running
-Flask server.
-"""
-
 import requests
 
 from app.config import (
@@ -13,6 +5,11 @@ from app.config import (
     OPENFOODFACTS_SEARCH_URL,
     EXTERNAL_API_TIMEOUT,
 )
+
+# OpenFoodFacts blocks requests with no/generic User-Agent as bot traffic (403).
+HEADERS = {
+    "User-Agent": "InventoryManagementSystem/1.0 (student project; contact: olivermooz@gmail.com)"
+}
 
 
 class ExternalAPIError(Exception):
@@ -30,7 +27,7 @@ def fetch_product_by_barcode(barcode):
     url = OPENFOODFACTS_PRODUCT_URL.format(barcode=barcode)
 
     try:
-        response = requests.get(url, timeout=EXTERNAL_API_TIMEOUT)
+        response = requests.get(url, headers=HEADERS, timeout=EXTERNAL_API_TIMEOUT)
         response.raise_for_status()
     except requests.RequestException as exc:
         raise ExternalAPIError(f"Could not reach OpenFoodFacts: {exc}") from exc
@@ -60,7 +57,10 @@ def fetch_product_by_name(name):
 
     try:
         response = requests.get(
-            OPENFOODFACTS_SEARCH_URL, params=params, timeout=EXTERNAL_API_TIMEOUT
+            OPENFOODFACTS_SEARCH_URL,
+            params=params,
+            headers=HEADERS,
+            timeout=EXTERNAL_API_TIMEOUT,
         )
         response.raise_for_status()
     except requests.RequestException as exc:

@@ -1,8 +1,14 @@
 import PropTypes from "prop-types";
 
-export default function InventoryTable({ items, onDelete, onEditPrice }) {
+export default function InventoryTable({ items, onDelete, onEditField }) {
   if (items.length === 0) {
     return <p className="empty-state">No inventory items yet. Add one below.</p>;
+  }
+
+  function blurOnEnter(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
   }
 
   return (
@@ -21,9 +27,36 @@ export default function InventoryTable({ items, onDelete, onEditPrice }) {
         {items.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.product_name}</td>
+            <td>
+              <input
+                type="text"
+                defaultValue={item.product_name}
+                className="text-input"
+                onKeyDown={blurOnEnter}
+                onBlur={(e) => {
+                  const value = e.target.value.trim();
+                  if (value && value !== item.product_name) {
+                    onEditField(item.id, "product_name", value);
+                  }
+                }}
+              />
+            </td>
             <td>{item.brand || "—"}</td>
-            <td>{item.quantity ?? 0}</td>
+            <td>
+              <input
+                type="number"
+                min="0"
+                defaultValue={item.quantity ?? 0}
+                className="qty-input"
+                onKeyDown={blurOnEnter}
+                onBlur={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  if (!Number.isNaN(value) && value !== item.quantity) {
+                    onEditField(item.id, "quantity", value);
+                  }
+                }}
+              />
+            </td>
             <td>
               <input
                 type="number"
@@ -31,15 +64,11 @@ export default function InventoryTable({ items, onDelete, onEditPrice }) {
                 min="0"
                 defaultValue={item.price ?? 0}
                 className="price-input"
+                onKeyDown={blurOnEnter}
                 onBlur={(e) => {
                   const value = parseFloat(e.target.value);
                   if (!Number.isNaN(value) && value !== item.price) {
-                    onEditPrice(item.id, value);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.target.blur();
+                    onEditField(item.id, "price", value);
                   }
                 }}
               />
@@ -65,5 +94,5 @@ InventoryTable.propTypes = {
     price: PropTypes.number,
   })).isRequired,
   onDelete: PropTypes.func.isRequired,
-  onEditPrice: PropTypes.func.isRequired,
+  onEditField: PropTypes.func.isRequired,
 };

@@ -37,8 +37,8 @@ export default function App() {
     await refresh();
   }
 
-  async function handleEditPrice(id, price) {
-    await updateItem(id, { price });
+  async function handleEditField(id, field, value) {
+    await updateItem(id, { [field]: value });
     await refresh();
   }
 
@@ -60,7 +60,7 @@ export default function App() {
         {loading ? (
           <p>Loading…</p>
         ) : (
-          <InventoryTable items={items} onDelete={handleDelete} onEditPrice={handleEditPrice} />
+          <InventoryTable items={items} onDelete={handleDelete} onEditField={handleEditField} />
         )}
       </section>
 
