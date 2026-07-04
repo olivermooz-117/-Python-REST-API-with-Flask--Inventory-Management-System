@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f4f5f7;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+header {
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+h3 {
+  margin-top: 0;
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.price-input {
+  width: 80px;
+  padding: 0.25rem;
+}
+
+.empty-state {
+  color: #888;
+  font-style: italic;
+}
+
+.error-text {
+  color: #b00020;
+  background: #fdecea;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #444;
+  flex: 1;
+  min-width: 150px;
+}
+
+input {
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+button.danger:hover {
+  background: #b91c1c;
+}
+
+button.link-button {
+  background: none;
+  color: #2563eb;
+  padding: 0;
+  margin-left: 0.5rem;
+  text-decoration: underline;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+}
+
+.results-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.preview {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f0f5ff;
+  border-radius: 6px;
+}
