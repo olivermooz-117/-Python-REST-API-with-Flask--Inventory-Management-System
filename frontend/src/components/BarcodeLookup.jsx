@@ -8,6 +8,7 @@ export default function BarcodeLookup({ onItemAdded }) {
   const [results, setResults] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [addingBarcode, setAddingBarcode] = useState(null);
   const [error, setError] = useState("");
 
   async function handleSearch(e) {
@@ -54,6 +55,24 @@ export default function BarcodeLookup({ onItemAdded }) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleQuickAdd(productBarcode) {
+    setError("");
+    setAddingBarcode(productBarcode);
+    try {
+      const item = await addItemFromBarcode(productBarcode, { quantity: 1, price: 0 });
+      if (!item) {
+        setError(`No product found for barcode ${productBarcode}`);
+      } else {
+        onItemAdded(item);
+        setResults((prev) => (prev ? prev.filter((p) => p.barcode !== productBarcode) : prev));
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setAddingBarcode(null);
     }
   }
 
@@ -105,17 +124,16 @@ export default function BarcodeLookup({ onItemAdded }) {
         <ul className="results-list">
           {results.map((product, idx) => (
             <li key={product.barcode || idx}>
-              <strong>{product.product_name}</strong> — {product.brand}
+              <span>
+                <strong>{product.product_name}</strong> — {product.brand}
+              </span>
               {product.barcode && (
                 <button
-                  className="link-button"
-                  onClick={() => {
-                    setBarcode(product.barcode);
-                    setPreview(product);
-                    setResults(null);
-                  }}
+                  className="quick-add-button"
+                  onClick={() => handleQuickAdd(product.barcode)}
+                  disabled={addingBarcode === product.barcode}
                 >
-                  Use this
+                  {addingBarcode === product.barcode ? "Adding…" : "Add to Inventory"}
                 </button>
               )}
             </li>
