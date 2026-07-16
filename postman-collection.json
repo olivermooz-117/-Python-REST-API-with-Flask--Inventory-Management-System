@@ -1,0 +1,179 @@
+{
+  "info": {
+    "name": "Inventory Management System API",
+    "description": "CRUD + OpenFoodFacts lookup endpoints for the Flask Inventory Management System.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "item_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": ["{{base_url}}"],
+          "path": [""]
+        },
+        "description": "Confirms the API is running."
+      }
+    },
+    {
+      "name": "Get All Inventory Items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inventory",
+          "host": ["{{base_url}}"],
+          "path": ["inventory"]
+        }
+      }
+    },
+    {
+      "name": "Get Single Item",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inventory/{{item_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "{{item_id}}"]
+        },
+        "description": "Returns 404 if the item_id doesn't exist. Update the item_id collection variable to match a real item after creating one."
+      }
+    },
+    {
+      "name": "Create Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_name\": \"Almond Milk\",\n  \"brand\": \"Silk\",\n  \"quantity\": 10,\n  \"price\": 3.99\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/inventory",
+          "host": ["{{base_url}}"],
+          "path": ["inventory"]
+        },
+        "description": "product_name is required. Other fields are optional."
+      }
+    },
+    {
+      "name": "Create Item - Missing product_name (should 400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"brand\": \"Silk\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/inventory",
+          "host": ["{{base_url}}"],
+          "path": ["inventory"]
+        }
+      }
+    },
+    {
+      "name": "Update Item (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 4.50,\n  \"quantity\": 8\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/inventory/{{item_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "{{item_id}}"]
+        },
+        "description": "Partial update — only send the fields you want to change."
+      }
+    },
+    {
+      "name": "Delete Item",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inventory/{{item_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "{{item_id}}"]
+        },
+        "description": "Returns 204 No Content on success, 404 if the item doesn't exist."
+      }
+    },
+    {
+      "name": "Lookup Product by Barcode (OpenFoodFacts)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inventory/lookup?barcode=3017620422003",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "lookup"],
+          "query": [
+            { "key": "barcode", "value": "3017620422003" }
+          ]
+        },
+        "description": "3017620422003 is Nutella's real barcode — safe test value. Does not add anything to inventory."
+      }
+    },
+    {
+      "name": "Lookup Product by Name (OpenFoodFacts)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inventory/lookup?name=milk",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "lookup"],
+          "query": [
+            { "key": "name", "value": "milk" }
+          ]
+        },
+        "description": "Returns a list of matching products. Does not add anything to inventory."
+      }
+    },
+    {
+      "name": "Lookup and Add to Inventory (Barcode)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"barcode\": \"3017620422003\",\n  \"quantity\": 5,\n  \"price\": 4.5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/inventory/lookup",
+          "host": ["{{base_url}}"],
+          "path": ["inventory", "lookup"]
+        },
+        "description": "Fetches the product from OpenFoodFacts by barcode and adds it directly to inventory."
+      }
+    }
+  ]
+}

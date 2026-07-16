@@ -31,6 +31,9 @@ python3 run.py
 Runs at `http://localhost:5000`. Keep this running in its own terminal —
 both the CLI and the frontend need it.
 
+## Testing with Postman
+Import `postman_collection.json` into Postman to test all API endpoints directly.
+
 ## Using the CLI
 
 In a new terminal (with the venv activated):
